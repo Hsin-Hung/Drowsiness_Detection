@@ -5,34 +5,15 @@ import shutil
 dir_path = os.path.dirname(__file__)
 
 kaggle.api.authenticate()
-kaggle.api.dataset_download_files('prasadvpatil/mrl-dataset', path=dir_path, unzip=True)
+
 kaggle.api.dataset_download_files('dheerajperumandla/drowsiness-dataset', path=dir_path, unzip=True)
 
-shutil.rmtree(dir_path + "/train/yawn")
-shutil.rmtree(dir_path + "/train/no_yawn")
+shutil.move(dir_path + "/train", dir_path + "/test")
+shutil.move(dir_path + "/test/Closed", dir_path + "/test/Closed_Eyes")
+shutil.move(dir_path + "/test/Open", dir_path + "/test/Open_Eyes")
 
-source = dir_path + "/train/Closed"
-destination = dir_path + "/train/Closed_Eyes"
+kaggle.api.dataset_download_files('prasadvpatil/mrl-dataset', path=dir_path, unzip=True)
 
-allfiles = os.listdir(source)
- 
-# iterate on all files to move them to destination folder
-for f in allfiles:
-    src_path = os.path.join(source, f)
-    dst_path = os.path.join(destination, f)
-    shutil.move(src_path, dst_path)
+shutil.rmtree(dir_path + "/test/yawn")
+shutil.rmtree(dir_path + "/test/no_yawn")
 
-source = dir_path + "/train/Open"
-destination = dir_path + "/train/Open_Eyes"
-
-
-allfiles = os.listdir(source)
- 
-# iterate on all files to move them to destination folder
-for f in allfiles:
-    src_path = os.path.join(source, f)
-    dst_path = os.path.join(destination, f)
-    shutil.move(src_path, dst_path)
-
-shutil.rmtree(dir_path + "/train/Closed")
-shutil.rmtree(dir_path + "/train/Open")
